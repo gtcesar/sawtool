@@ -22,7 +22,7 @@ class LoginLdap extends TPage
 
         // create the form
         $this->form = new BootstrapFormBuilder;
-        $this->form->setFormTitle('Acesso ao sistema SWA');
+        $this->form->setFormTitle('Acesso ao sistema SAWTOOL');
         $this->form->generateAria(); // automatic aria-label
 
         // create the form fields
@@ -31,7 +31,7 @@ class LoginLdap extends TPage
         $password->addValidation('Password', new TRequiredValidator);
 
         // add the fields inside the form
-        $this->form->addFields([new TLabel('Informe a senha para administração do servidor')], [$password]);
+        $this->form->addFields([new TLabel('Senha')], [$password]);
 
         // define the form action
         $this->form->addAction('Ok', new TAction(array($this, 'onLogin')), 'far:check-circle green');
@@ -86,7 +86,7 @@ class LoginLdap extends TPage
 
             if ($conn) {
                 TSession::setValue('logged', true);
-                AdiantiCoreApplication::gotoPage('EmptyPage'); // reload          
+                AdiantiCoreApplication::gotoPage('Dashboard'); // reload          
             } else {
                 new TMessage('error', 'Senha inválida');
             }

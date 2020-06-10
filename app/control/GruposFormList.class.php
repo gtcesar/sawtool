@@ -8,7 +8,7 @@
  * @subpackage admin
  * @author     Augusto Cesar da Costa Marques
  */
-class GruposList extends TPage
+class GruposFormList extends TPage
 {
     private $datagrid;
     private $samba_tool;
@@ -25,6 +25,31 @@ class GruposList extends TPage
         $this->samba_tool = $config['samba-tool']['path'];
         $this->group_ignore = $config['samba-tool']['group_ignore'];
         $this->user_ignore = $config['samba-tool']['user_ignore'];
+
+         // creates the form
+        $this->form = new BootstrapFormBuilder('form_grupos');
+        $this->form->setFormTitle('Grupos');
+        
+        // create the form fields
+
+        $nome = new TEntry('nome');  
+        $nome_label = new TLabel('Nome');
+
+        $descricao = new TEntry('descricao');  
+        $descricao_label = new TLabel('Descrição');
+  
+  
+        // add a row with 2 slots
+        $this->form->addFields( [ $nome_label ], [ $nome ] );     
+        $this->form->addFields( [ $descricao_label ], [ $descricao ] );     
+       
+         
+        $nome->addValidation('Nome', new TRequiredValidator); // required field
+
+        $nome->setSize('100%');   
+        $descricao->setSize('100%'); 
+
+        $this->form->addAction(_t('Save'), new TAction(array($this, 'onSave')), 'far:save');
         
         // creates one datagrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
@@ -37,8 +62,16 @@ class GruposList extends TPage
         //$action1 = new TDataGridAction([$this, 'onView'],   ['grupo' => '{grupo}'] );
         //$this->datagrid->addAction($action1, 'View', 'fa:search blue');
         
-        $action1 = new TDataGridAction([$this, 'onGroup'],   ['grupo' => '{grupo}'] );
-        $this->datagrid->addAction($action1, 'View', 'fa:search blue');
+        $action1 = new TDataGridAction(array($this, 'onDelete'));
+        $action1->setLabel(_t('Delete'));
+        $action1->setImage('far:trash-alt red');
+        $action1->setField('grupo');
+
+        $this->datagrid->addAction($action1);
+
+        $action2 = new TDataGridAction([$this, 'onGroup'],   ['grupo' => '{grupo}'] );
+        $this->datagrid->addAction($action2, 'View', 'fa:search blue');
+
         
         // creates the datagrid model
         $this->datagrid->createModel();
@@ -56,12 +89,14 @@ class GruposList extends TPage
         $panel->add($this->datagrid)->style = 'overflow-x:auto';
         $panel->addFooter('');
         
-        // wrap the page content using vertical box
-        $vbox = new TVBox;
-        $vbox->style = 'width: 100%';
-        $vbox->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
-        $vbox->add($panel);
-        parent::add($vbox);
+        // vertical box container
+        $container = new TVBox;
+        $container->style = 'width: 100%';
+        $container->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
+        $container->add($this->form);
+        $container->add($panel);
+        
+        parent::add($container);
     }
     
     /**
@@ -69,9 +104,16 @@ class GruposList extends TPage
      */
     function onReload()
     {
-        $this->datagrid->clear();              
+        $this->datagrid->clear();   
+        
+        if($this->group_ignore != '')
+        {
+            $group_ignore = "|egrep -v '{$this->group_ignore}'";
+        }else{
+            $group_ignore = '';
+        }
                 
-        $comando = "sudo " . $this->samba_tool . " group list|egrep -v '{$this->group_ignore}'";        
+        $comando = "sudo " . $this->samba_tool . " group list{$group_ignore}";        
         $result = shell_exec($comando);
         
         $grupos = explode("\n", $result);        
@@ -235,6 +277,79 @@ class GruposList extends TPage
          $this->onReload(); // reload the listing          
       }   
  
+
+    }
+
+        /**
+     * Save form data
+     * @param $param Request
+     */
+    public function onSave( $param )
+    {
+
+        try
+        {
+            $data = $this->form->getData();
+
+            $this->form->validate();
+            
+            if($data->descricao != '')
+            {
+                $descricao = "--description='{$data->descricao}'";
+            }else{
+              $descricao = '';
+            }
+      
+            $comando = "sudo " . $this->samba_tool . " group add '{$data->nome}' {$descricao}";   
+            $result = shell_exec($comando);
+            
+            if ($result) {
+               new TMessage('info', 'Grupo criado com sucesso!' . $comando); 
+               $this->form->clear();
+               $this->onReload(); // reload the listing          
+            }else{
+               new TMessage('error', "Ocorreu um erro, verifique se o grupo já existe!");
+               $this->form->clear();
+            } ;
+        }
+        catch (Exception $e)
+        {
+            new TMessage('error', $e->getMessage());
+        }    
+         
+
+    }
+
+        /**
+     * Ask before deletion
+     */
+    public function onDelete($param)
+    {
+        $grupo = $param['grupo']; // get the parameter $key
+    
+        // define the delete action
+        $action = new TAction(array($this, 'Delete'));
+        $action->setParameters($param); // pass the key parameter ahead
+        
+        // shows a dialog to the user
+        new TQuestion("Deseja excluir o grupo: <b>{$grupo}</b> ?", $action);
+    }
+    
+    /**
+     * Delete a record
+     */
+    public function Delete($param)
+    {
+    
+      $grupo = $param['grupo']; // get the parameter $key
+      
+      $comando = "sudo " . $this->samba_tool . " group delete {$grupo}";        
+      $result = shell_exec($comando);
+      
+      if ($result) {
+         new TMessage('info', 'Grupo excluido com sucesso!'); 
+         $this->onReload(); // reload the listing          
+      }    
 
     }
     

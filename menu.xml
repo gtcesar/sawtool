@@ -9,7 +9,7 @@
             
             <menuitem label='Grupos'>
                 <icon>fa:users fa-fw</icon>
-                <action>GruposList</action>
+                <action>GruposFormList</action>
             </menuitem>
             
             <menuitem label='Sobre'>

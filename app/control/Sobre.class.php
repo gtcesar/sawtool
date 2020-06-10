@@ -15,7 +15,7 @@ class Sobre extends TPage
         // replace the main section variables
         $html->enableSection('main', array());
         
-        $panel = new TPanelGroup('SambaWebAdmin');
+        $panel = new TPanelGroup('SAWTOOL');
         $panel->add($html);
 
         $vbox = TVBox::pack($panel);
