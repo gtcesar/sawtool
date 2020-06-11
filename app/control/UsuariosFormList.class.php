@@ -24,7 +24,7 @@ class UsuariosFormList extends TPage
     {
         parent::__construct();
         
-        $config = parse_ini_file('app/config/config.ini', true);
+        $config = parse_ini_file('param/config.ini', true);
         
         $this->samba_tool = $config['samba-tool']['path'];
         $this->user_ignore = $config['samba-tool']['user_ignore'];
@@ -281,9 +281,9 @@ class UsuariosFormList extends TPage
                $this->form->clear();
                $this->onReload(); // reload the listing          
             }else{
-               new TMessage('error', "Ocorreu um erro, verifique se o usuario já existe!");
+               new TMessage('error', "Ocorreu um erro, tente novamente!");
                $this->form->clear();
-            } ;
+            }
         }
         catch (Exception $e)
         {

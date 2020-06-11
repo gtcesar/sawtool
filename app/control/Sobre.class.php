@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Sobre
+ *
+ * @version    1.0
+ * @package    control
+ * @subpackage admin
+ * @author     Augusto Cesar da Costa Marques
+ */
 class Sobre extends TPage
 {
     /**

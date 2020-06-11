@@ -76,7 +76,7 @@ class LoginLdap extends TPage
     {
         try
         {
-            $config = parse_ini_file('app/config/config.ini', true);
+            $config = parse_ini_file('param/config.ini', true);
 
             $data = $this->form->getData();
 
@@ -86,7 +86,7 @@ class LoginLdap extends TPage
 
             if ($conn) {
                 TSession::setValue('logged', true);
-                AdiantiCoreApplication::gotoPage('Dashboard'); // reload          
+                AdiantiCoreApplication::gotoPage('DashboardView'); // reload          
             } else {
                 new TMessage('error', 'Senha inválida');
             }

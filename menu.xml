@@ -1,4 +1,8 @@
 <menu>
+    <menuitem label='Dashboard'>
+        <action>DashboardView</action>
+        <icon>fas:tachometer-alt fa-fw</icon>
+    </menuitem>
     <menuitem label='Menu'>
         <icon>fa:list fa-fw</icon>
         <menu>
@@ -10,6 +14,11 @@
             <menuitem label='Grupos'>
                 <icon>fa:users fa-fw</icon>
                 <action>GruposFormList</action>
+            </menuitem>
+            
+            <menuitem label='Configurações'>
+                <icon>fas:wrench fa-fw</icon>
+                <action>ConfigForm</action>
             </menuitem>
             
             <menuitem label='Sobre'>
