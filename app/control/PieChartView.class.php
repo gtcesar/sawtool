@@ -68,7 +68,7 @@ class PieChartView extends TPage
         // replace the main section variables
         $html->enableSection('main', array('data'   => json_encode($data),
                                            'width'  => '100%',
-                                           'height'  => '800px',
+                                           'height'  => '600px',
                                            'title'  => 'Usuarios por grupo',
                                            'uniqid' => uniqid()));
         

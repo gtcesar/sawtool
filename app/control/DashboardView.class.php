@@ -81,15 +81,16 @@ class DashboardView extends TPage
         $indicator2->enableSection('main', ['title'      => 'Usuarios',
                                             'icon'       => 'user',
                                             'background' => 'orange',
+          
                                             'value'      => $usuarios ] );
         $div->add( $i1 = TElement::tag('div', $indicator1) );
         $div->add( $i2 = TElement::tag('div', $indicator2) );
-        $div->add( $g1 = new PieChartView(false) );
-        
+        $div->add( $g1 = new PieChartView(false) );        
         
         $i1->class = 'col-sm-6';
         $i2->class = 'col-sm-6';
         $g1->class = 'col-sm-12';
+        
         
         $vbox->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
         $vbox->add($div);
