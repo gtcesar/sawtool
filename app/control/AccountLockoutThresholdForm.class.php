@@ -23,7 +23,7 @@ class AccountLockoutThresholdForm extends TWindow
         parent::setModal(true);
         parent::removePadding();
         parent::setSize(600,null);
-        parent::setTitle('Account lockout threshold (attempts)');
+        parent::setTitle('Limite de bloqueio de conta (tentativas)');
         
         $config = parse_ini_file('param/config.ini', true);
         
@@ -44,7 +44,7 @@ class AccountLockoutThresholdForm extends TWindow
         // add the form fields
         $this->form->addFields( [ $account_lockout_threshold ] ); 
         
-        $account_lockout_threshold->addValidation( 'Account lockout threshold (mins)', new TRequiredValidator);
+        $account_lockout_threshold->addValidation( 'Limite de bloqueio de conta (tentativas)', new TRequiredValidator);
         
         $account_lockout_threshold->setSize('100%'); 
         

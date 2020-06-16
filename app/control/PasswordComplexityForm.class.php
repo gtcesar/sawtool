@@ -23,7 +23,7 @@ class PasswordComplexityForm extends TWindow
         parent::setModal(true);
         parent::removePadding();
         parent::setSize(600,null);
-        parent::setTitle('Password complexity');
+        parent::setTitle('Complexidade da senha');
         
         $config = parse_ini_file('param/config.ini', true);
         
@@ -47,7 +47,7 @@ class PasswordComplexityForm extends TWindow
         // add the form fields
         $this->form->addFields( [ $pass_complexity ] ); 
         
-        $pass_complexity->addValidation( 'Password complexity', new TRequiredValidator);
+        $pass_complexity->addValidation( 'Complexidade da senha', new TRequiredValidator);
         
         $pass_complexity->setSize('100%'); 
         

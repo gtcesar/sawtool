@@ -191,7 +191,7 @@ class GruposFormList extends TPage
     
       $grupo = $param['grupo']; // get the parameter $key
       
-      $comando = "sudo " . $this->samba_tool . " group delete {$grupo}";        
+      $comando = "sudo " . $this->samba_tool . " group delete '{$grupo}'";        
       $result = shell_exec($comando);
       
       if ($result) {

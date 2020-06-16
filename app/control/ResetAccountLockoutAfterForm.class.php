@@ -23,7 +23,7 @@ class ResetAccountLockoutAfterForm extends TWindow
         parent::setModal(true);
         parent::removePadding();
         parent::setSize(600,null);
-        parent::setTitle('Reset account lockout after (mins)');
+        parent::setTitle('Redefinir o bloqueio de conta após (min)');
         
         $config = parse_ini_file('param/config.ini', true);
         
@@ -44,7 +44,7 @@ class ResetAccountLockoutAfterForm extends TWindow
         // add the form fields
         $this->form->addFields( [ $reset_account_lockout_after ] ); 
         
-        $reset_account_lockout_after->addValidation( 'Reset account lockout after (mins)', new TRequiredValidator);
+        $reset_account_lockout_after->addValidation( 'Redefinir o bloqueio de conta após (min)', new TRequiredValidator);
         
         $reset_account_lockout_after->setSize('100%'); 
         

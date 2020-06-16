@@ -23,7 +23,7 @@ class MinimumPasswordAgeForm extends TWindow
         parent::setModal(true);
         parent::removePadding();
         parent::setSize(600,null);
-        parent::setTitle('Minimum password age (days)');
+        parent::setTitle('Idade mínima da senha (dias)');
         
         $config = parse_ini_file('param/config.ini', true);
         
@@ -44,7 +44,7 @@ class MinimumPasswordAgeForm extends TWindow
         // add the form fields
         $this->form->addFields( [ $minimum_password_age ] ); 
         
-        $minimum_password_age->addValidation( 'Minimum password age (days)', new TRequiredValidator);
+        $minimum_password_age->addValidation( 'Idade mínima da senha (dias)', new TRequiredValidator);
         
         $minimum_password_age->setSize('100%'); 
         

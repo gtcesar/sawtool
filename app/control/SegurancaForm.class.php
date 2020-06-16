@@ -30,7 +30,7 @@ class SegurancaForm extends TPage
         $result = shell_exec($comando);
         
         $info = explode("\n", $result);     
-        array_shift($info);   
+        array_shift($info);
         array_shift($info); 
         array_pop($info); 
         
@@ -39,6 +39,7 @@ class SegurancaForm extends TPage
         $this->form->setFormTitle('Segurança');      
      
         $pass_complex = new TEntry('pass_complex');        
+        $pass_complex->setTip('Habilita e Desabilita a complexidade de senha, o padrão é ON');     
         $pass_complex_array = explode(":", $info[0]);        
         $pass_complex->setValue($pass_complex_array[1]);
         $pass_complex->setEditable(FALSE);
@@ -48,7 +49,8 @@ class SegurancaForm extends TPage
         $button_pass_complex->title = 'Editar';
         $pass_complex->after($button_pass_complex);        
        
-        $hist_length = new TEntry('hist_length');        
+        $hist_length = new TEntry('hist_length');   
+        $hist_length->setTip('O tamanho do histórico da senha  pode colocar numeros inteiros para dias ou default, o default é 24');     
         $hist_length_array = explode(":", $info[2]);        
         $hist_length->setValue($hist_length_array[1]);
         $hist_length->setEditable(FALSE);
@@ -58,7 +60,8 @@ class SegurancaForm extends TPage
         $button_hist_length->title = 'Editar';
         $hist_length->after($button_hist_length);
         
-        $pass_length = new TEntry('pass_length');        
+        $pass_length = new TEntry('pass_length');   
+        $pass_length->setTip('Tamanho mínimo da senha, o padrão é 7, zero desabilita');           
         $pass_length_array = explode(":", $info[3]);        
         $pass_length->setValue($pass_length_array[1]);
         $pass_length->setEditable(FALSE);
@@ -68,7 +71,8 @@ class SegurancaForm extends TPage
         $button_pass_length->title = 'Editar';
         $pass_length->after($button_pass_length);
         
-        $minimum_pass_age = new TEntry('minimum_pass_age');        
+        $minimum_pass_age = new TEntry('minimum_pass_age');  
+        $minimum_pass_age->setTip('Idade minima de senha. Valores em numero de dias, o padrão é 1, zero desabilita');       
         $minimum_pass_age_array = explode(":", $info[4]);        
         $minimum_pass_age->setValue($minimum_pass_age_array[1]);
         $minimum_pass_age->setEditable(FALSE);
@@ -78,7 +82,8 @@ class SegurancaForm extends TPage
         $button_minimum_pass_age->title = 'Editar';
         $minimum_pass_age->after($button_minimum_pass_age);
         
-        $maximum_pass_age = new TEntry('maximum_pass_age');        
+        $maximum_pass_age = new TEntry('maximum_pass_age');    
+        $maximum_pass_age->setTip('Idade maxima de senha. Valores em numero de dias, padrão é 43, zero desabilita');     
         $maximum_pass_age_array = explode(":", $info[5]);        
         $maximum_pass_age->setValue($maximum_pass_age_array[1]);
         $maximum_pass_age->setEditable(FALSE);
@@ -88,7 +93,8 @@ class SegurancaForm extends TPage
         $button_maximum_pass_age->title = 'Editar';
         $maximum_pass_age->after($button_maximum_pass_age);
         
-        $acconunt_lockout_duration = new TEntry('acconunt_lockout_duration');        
+        $acconunt_lockout_duration = new TEntry('acconunt_lockout_duration');   
+        $acconunt_lockout_duration->setTip('O período de tempo que uma conta é bloqueada após exceder o limite de tentativas incorretas de senha, padrão 30 minutos , pode colocar numeros inteiros para minutos ou default');     
         $acconunt_lockout_duration_array = explode(":", $info[6]);        
         $acconunt_lockout_duration->setValue($acconunt_lockout_duration_array[1]);
         $acconunt_lockout_duration->setEditable(FALSE);
@@ -98,7 +104,8 @@ class SegurancaForm extends TPage
         $button_acconunt_lockout_duration->title = 'Editar';
         $acconunt_lockout_duration->after($button_acconunt_lockout_duration);
         
-        $acconunt_lockout_threshold = new TEntry('acconunt_lockout_threshold');        
+        $acconunt_lockout_threshold = new TEntry('acconunt_lockout_threshold');       
+        $acconunt_lockout_threshold->setTip('O número de tentativas incorretas de senha permitidas antes de ser bloqueado, pode colocar numeros inteiros para minutos ou default o default é 0 nunca bloqueia');  
         $acconunt_lockout_threshold_array = explode(":", $info[7]);        
         $acconunt_lockout_threshold->setValue($acconunt_lockout_threshold_array[1]);
         $acconunt_lockout_threshold->setEditable(FALSE);
@@ -108,7 +115,8 @@ class SegurancaForm extends TPage
         $button_acconunt_lockout_threshold->title = 'Editar';
         $acconunt_lockout_threshold->after($button_acconunt_lockout_threshold);
         
-        $reset_account_lockout = new TEntry('reset_account_lockout');        
+        $reset_account_lockout = new TEntry('reset_account_lockout');   
+        $reset_account_lockout->setTip('Após esse tempo, o número registrado de tentativas são reiniciadas do zero, pode colocar numeros inteiros para minutos ou default o default é 30');     
         $reset_account_lockout_array = explode(":", $info[8]);        
         $reset_account_lockout->setValue($reset_account_lockout_array[1]);
         $reset_account_lockout->setEditable(FALSE);
@@ -118,21 +126,21 @@ class SegurancaForm extends TPage
         $button_reset_account_lockout->title = 'Editar';
         $reset_account_lockout->after($button_reset_account_lockout);
         
-        $row = $this->form->addFields( [new TLabel('Password complexity:')], [$pass_complex] );
+        $row = $this->form->addFields( [new TLabel('Complexidade da senha:')], [$pass_complex] );
         $row->layout = ['col-sm-6', 'col-sm-6' ];
-        $row = $this->form->addFields( [new TLabel('Password history length:')], [$hist_length] );
+        $row = $this->form->addFields( [new TLabel('Comprimento do histórico de senhas:')], [$hist_length] );
         $row->layout = ['col-sm-6', 'col-sm-6' ];
-        $row = $this->form->addFields( [new TLabel('Minimum password length:')], [$pass_length] );
+        $row = $this->form->addFields( [new TLabel('Comprimento mínimo da senha:')], [$pass_length] );
         $row->layout = ['col-sm-6', 'col-sm-6' ];
-        $row = $this->form->addFields( [new TLabel('Minimum password age (days):')], [$minimum_pass_age] );
+        $row = $this->form->addFields( [new TLabel('Idade mínima da senha (dias):')], [$minimum_pass_age] );
         $row->layout = ['col-sm-6', 'col-sm-6' ];
-        $row = $this->form->addFields( [new TLabel('Maximum password age (days):')], [$maximum_pass_age] );
+        $row = $this->form->addFields( [new TLabel('Idade máxima da senha (dias):')], [$maximum_pass_age] );
         $row->layout = ['col-sm-6', 'col-sm-6' ];
-        $row = $this->form->addFields( [new TLabel('Account lockout duration (mins):')], [$acconunt_lockout_duration] );
+        $row = $this->form->addFields( [new TLabel('Duração do bloqueio da conta (min):')], [$acconunt_lockout_duration] );
         $row->layout = ['col-sm-6', 'col-sm-6' ];
-        $row = $this->form->addFields( [new TLabel('Account lockout threshold (attempts):')], [$acconunt_lockout_threshold] );
+        $row = $this->form->addFields( [new TLabel('Limite de bloqueio de conta (tentativas):')], [$acconunt_lockout_threshold] );
         $row->layout = ['col-sm-6', 'col-sm-6' ];
-        $row = $this->form->addFields( [new TLabel('Reset account lockout after (mins):')], [$reset_account_lockout] );
+        $row = $this->form->addFields( [new TLabel('Redefinir o bloqueio de conta após (min):')], [$reset_account_lockout] );
         $row->layout = ['col-sm-6', 'col-sm-6' ];
        
         // vertical box container

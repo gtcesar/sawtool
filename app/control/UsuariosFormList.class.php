@@ -182,7 +182,7 @@ class UsuariosFormList extends TPage
     
       $login = $param['login']; // get the parameter $key
       
-      $comando = "sudo " . $this->samba_tool . " user delete {$login}";        
+      $comando = "sudo " . $this->samba_tool . " user delete '{$login}'";        
       $result = shell_exec($comando);
       
       if ($result) {
@@ -242,7 +242,7 @@ class UsuariosFormList extends TPage
               $alterar_senha = '';
             }
       
-            $comando = "sudo " . $this->samba_tool . " user setpassword {$login} --newpassword={$senha} {$alterar_senha}";        
+            $comando = "sudo " . $this->samba_tool . " user setpassword '{$login}' --newpassword={$senha} {$alterar_senha}";        
             $result = shell_exec($comando);
             
             if ($result) {
@@ -273,7 +273,7 @@ class UsuariosFormList extends TPage
               $alterar_senha = '';
             }
       
-            $comando = "sudo " . $this->samba_tool . " user create {$data->login} {$data->senha} --given-name='{$data->nome}' --surname='{$data->sobrenome}' {$alterar_senha}";   
+            $comando = "sudo " . $this->samba_tool . " user create '{$data->login}' {$data->senha} --given-name='{$data->nome}' --surname='{$data->sobrenome}' {$alterar_senha}";   
             $result = shell_exec($comando);
             
             if ($result) {

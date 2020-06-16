@@ -50,7 +50,7 @@ class PieChartView extends TPage
         
         foreach ($array_g as $key => $value) { 
         
-            $comando_m = "sudo " . $this->samba_tool . " group listmembers {$value}";
+            $comando_m = "sudo " . $this->samba_tool . " group listmembers '{$value}'";
             $result_m = shell_exec($comando_m);
             
             $array_m = explode("\n", $result_m);        

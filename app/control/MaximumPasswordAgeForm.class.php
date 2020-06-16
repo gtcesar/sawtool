@@ -23,7 +23,7 @@ class MaximumPasswordAgeForm extends TWindow
         parent::setModal(true);
         parent::removePadding();
         parent::setSize(600,null);
-        parent::setTitle('Maximum password age (days)');
+        parent::setTitle('Idade máxima da senha (dias)');
         
         $config = parse_ini_file('param/config.ini', true);
         
@@ -44,7 +44,7 @@ class MaximumPasswordAgeForm extends TWindow
         // add the form fields
         $this->form->addFields( [ $maximum_password_age ] ); 
         
-        $maximum_password_age->addValidation( 'Maximum password age (days)', new TRequiredValidator);
+        $maximum_password_age->addValidation( 'Idade máxima da senha (dias)', new TRequiredValidator);
         
         $maximum_password_age->setSize('100%'); 
         

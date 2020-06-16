@@ -23,7 +23,7 @@ class PasswordHistoryLengthForm extends TWindow
         parent::setModal(true);
         parent::removePadding();
         parent::setSize(600,null);
-        parent::setTitle('Password history length');
+        parent::setTitle('Comprimento do histórico de senhas');
         
         $config = parse_ini_file('param/config.ini', true);
         
@@ -44,7 +44,7 @@ class PasswordHistoryLengthForm extends TWindow
         // add the form fields
         $this->form->addFields( [ $password_history_length ] ); 
         
-        $password_history_length->addValidation( 'Password history length', new TRequiredValidator);
+        $password_history_length->addValidation( 'Comprimento do histórico de senhas', new TRequiredValidator);
         
         $password_history_length->setSize('100%'); 
         

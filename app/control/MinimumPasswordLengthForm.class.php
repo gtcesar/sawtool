@@ -23,7 +23,7 @@ class MinimumPasswordLengthForm extends TWindow
         parent::setModal(true);
         parent::removePadding();
         parent::setSize(600,null);
-        parent::setTitle('Minimum password length');
+        parent::setTitle('Comprimento mínimo da senha');
         
         $config = parse_ini_file('param/config.ini', true);
         
@@ -44,7 +44,7 @@ class MinimumPasswordLengthForm extends TWindow
         // add the form fields
         $this->form->addFields( [ $minimum_password_length ] ); 
         
-        $minimum_password_length->addValidation( 'Minimum password length', new TRequiredValidator);
+        $minimum_password_length->addValidation( 'Comprimento mínimo da senha', new TRequiredValidator);
         
         $minimum_password_length->setSize('100%'); 
         

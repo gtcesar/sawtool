@@ -113,7 +113,7 @@ class GrupoUserFormSeek extends TWindow
             //repassamos para o onreload o parametro do grupo para ele saber onde estava
             $array_grupo = ['grupo' => $grupo];
          
-            $comando = "sudo " . $this->samba_tool . " group addmembers {$grupo} {$usuario}";        
+            $comando = "sudo " . $this->samba_tool . " group addmembers '{$grupo}' '{$usuario}'";        
             $result = shell_exec($comando);
             
             if ($result) {
@@ -142,7 +142,7 @@ class GrupoUserFormSeek extends TWindow
         
         $this->datagrid->clear();   
         
-        $comando = "sudo " . $this->samba_tool . " group listmembers {$grupo}";        
+        $comando = "sudo " . $this->samba_tool . " group listmembers '{$grupo}'";        
         $result = shell_exec($comando);
         
         $usuarios = explode("\n", $result);        
@@ -157,7 +157,7 @@ class GrupoUserFormSeek extends TWindow
         }
         
         //listamos os usuarios do grupo passado pela request
-        $comando1 = "sudo " . $this->samba_tool . " group listmembers {$grupo}";         
+        $comando1 = "sudo " . $this->samba_tool . " group listmembers '{$grupo}'";         
         $result1 = shell_exec($comando1);
         
         $usuarios1 = explode("\n", $result1);        
@@ -225,7 +225,7 @@ class GrupoUserFormSeek extends TWindow
       //repassamos para o onreload o parametro do grupo para ele saber onde estava
       $array_grupo = ['grupo' => $grupo];
       
-      $comando = "sudo " . $this->samba_tool . " group removemembers {$grupo} {$usuario}";        
+      $comando = "sudo " . $this->samba_tool . " group removemembers '{$grupo}' '{$usuario}'";        
       $result = shell_exec($comando);
       
       if ($result) {

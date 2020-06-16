@@ -23,7 +23,7 @@ class AccountLockoutDurationForm extends TWindow
         parent::setModal(true);
         parent::removePadding();
         parent::setSize(600,null);
-        parent::setTitle('Account lockout duration (mins)');
+        parent::setTitle('Duração do bloqueio da conta (min)');
         
         $config = parse_ini_file('param/config.ini', true);
         
@@ -44,7 +44,7 @@ class AccountLockoutDurationForm extends TWindow
         // add the form fields
         $this->form->addFields( [ $account_lockout_duration ] ); 
         
-        $account_lockout_duration->addValidation( 'Account lockout duration (mins)', new TRequiredValidator);
+        $account_lockout_duration->addValidation( 'Duração do bloqueio da conta (min)', new TRequiredValidator);
         
         $account_lockout_duration->setSize('100%'); 
         
