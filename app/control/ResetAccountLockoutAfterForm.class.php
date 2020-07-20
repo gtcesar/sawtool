@@ -36,10 +36,14 @@ class ResetAccountLockoutAfterForm extends TWindow
         $reset_account_lockout_after = new TEntry('reset_account_lockout_after');       
         $reset_account_lockout_after->setMask('9!');
         
+        $explicacao = new TLabel('Após esse tempo, o número registrado de tentativas são reiniciadas do zero, pode colocar numeros inteiros para minutos ou default o default é 30');
+        
         if(isset($_REQUEST['value']))
         {
             $reset_account_lockout_after->setValue(substr($_REQUEST['value'], 1));
         }
+        
+        $this->form->appendPage('Configuração');
         
         // add the form fields
         $this->form->addFields( [ $reset_account_lockout_after ] ); 
@@ -47,6 +51,10 @@ class ResetAccountLockoutAfterForm extends TWindow
         $reset_account_lockout_after->addValidation( 'Redefinir o bloqueio de conta após (min)', new TRequiredValidator);
         
         $reset_account_lockout_after->setSize('100%'); 
+        
+        $this->form->appendPage('Explicação');
+        
+        $this->form->addFields( [ $explicacao ] );
         
         // define the form action
         $this->form->addAction('Save', new TAction(array($this, 'onSave')), 'fa:save green');        

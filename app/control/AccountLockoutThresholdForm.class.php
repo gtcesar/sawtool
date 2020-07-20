@@ -36,10 +36,14 @@ class AccountLockoutThresholdForm extends TWindow
         $account_lockout_threshold = new TEntry('account_lockout_threshold');       
         $account_lockout_threshold->setMask('9!');
         
+        $explicacao = new TLabel('O número de tentativas incorretas de senha permitidas antes de ser bloqueado, pode colocar numeros inteiros para minutos ou default o default é 0 nunca bloqueia');
+        
         if(isset($_REQUEST['value']))
         {
             $account_lockout_threshold->setValue(substr($_REQUEST['value'], 1));
         }
+        
+        $this->form->appendPage('Configuração');
         
         // add the form fields
         $this->form->addFields( [ $account_lockout_threshold ] ); 
@@ -47,6 +51,10 @@ class AccountLockoutThresholdForm extends TWindow
         $account_lockout_threshold->addValidation( 'Limite de bloqueio de conta (tentativas)', new TRequiredValidator);
         
         $account_lockout_threshold->setSize('100%'); 
+        
+        $this->form->appendPage('Explicação');
+        
+        $this->form->addFields( [ $explicacao ] );
         
         // define the form action
         $this->form->addAction('Save', new TAction(array($this, 'onSave')), 'fa:save green');        

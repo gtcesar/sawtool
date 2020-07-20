@@ -39,10 +39,14 @@ class PasswordComplexityForm extends TWindow
         $pass_complexity_itens = ['on' =>'On', 'off' => 'Off'];
         $pass_complexity->addItems($pass_complexity_itens);
         
+        $explicacao = new TLabel('Habilita e Desabilita a complexidade de senha, o padrão é ON');
+        
         if(isset($_REQUEST['value']))
         {
             $pass_complexity->setValue(substr($_REQUEST['value'], 1));
         }
+        
+        $this->form->appendPage('Configuração');
         
         // add the form fields
         $this->form->addFields( [ $pass_complexity ] ); 
@@ -50,6 +54,10 @@ class PasswordComplexityForm extends TWindow
         $pass_complexity->addValidation( 'Complexidade da senha', new TRequiredValidator);
         
         $pass_complexity->setSize('100%'); 
+        
+        $this->form->appendPage('Explicação');
+        
+        $this->form->addFields( [ $explicacao ] );
         
         // define the form action
         $this->form->addAction('Save', new TAction(array($this, 'onSave')), 'fa:save green');        

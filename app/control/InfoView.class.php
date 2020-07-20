@@ -43,8 +43,15 @@ class InfoView extends TPage
          foreach($info as $inf){
             $table->addRowSet($inf);
         }       
+        
+        // creates the action button
+        $button = new TButton('restart');
+        $button->setLabel('Reiniciar SAMBA4'); 
+        $button->setImage('fas: fa-sync');        
+        $button->addFunction("__adianti_load_page('index.php?class=InfoView&method=onRestart');");
 
         $panel->add($table);
+        $panel->addFooter($button);
         
         // wrap the page content using vertical box
         $vbox = new TVBox;
@@ -54,5 +61,20 @@ class InfoView extends TPage
         
         parent::add($vbox);
         
+    }
+    
+    public function onRestart($param)
+    {
+        try
+        {    
+            $comando = "sudo /bin/systemctl restart samba-ad-dc";   
+            $result = shell_exec($comando);
+            
+        }
+        catch (Exception $e)
+        {
+            new TMessage('error', $e->getMessage());
+        } 
+
     }
 }

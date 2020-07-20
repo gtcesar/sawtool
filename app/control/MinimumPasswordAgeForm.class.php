@@ -36,10 +36,14 @@ class MinimumPasswordAgeForm extends TWindow
         $minimum_password_age = new TEntry('minimum_password_age');       
         $minimum_password_age->setMask('9!');
         
+        $explicacao = new TLabel('Idade minima de senha. Valores em numero de dias, o padrão é 1, zero desabilita');
+        
         if(isset($_REQUEST['value']))
         {
             $minimum_password_age->setValue(substr($_REQUEST['value'], 1));
         }
+        
+        $this->form->appendPage('Configuração');
         
         // add the form fields
         $this->form->addFields( [ $minimum_password_age ] ); 
@@ -47,6 +51,10 @@ class MinimumPasswordAgeForm extends TWindow
         $minimum_password_age->addValidation( 'Idade mínima da senha (dias)', new TRequiredValidator);
         
         $minimum_password_age->setSize('100%'); 
+        
+        $this->form->appendPage('Explicação');
+        
+        $this->form->addFields( [ $explicacao ] );
         
         // define the form action
         $this->form->addAction('Save', new TAction(array($this, 'onSave')), 'fa:save green');        

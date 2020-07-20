@@ -36,10 +36,14 @@ class MaximumPasswordAgeForm extends TWindow
         $maximum_password_age = new TEntry('maximum_password_age');       
         $maximum_password_age->setMask('9!');
         
+        $explicacao = new TLabel('Idade maxima de senha. Valores em numero de dias, padrão é 43, zero desabilita');
+        
         if(isset($_REQUEST['value']))
         {
             $maximum_password_age->setValue(substr($_REQUEST['value'], 1));
         }
+        
+        $this->form->appendPage('Configuração');
         
         // add the form fields
         $this->form->addFields( [ $maximum_password_age ] ); 
@@ -47,6 +51,10 @@ class MaximumPasswordAgeForm extends TWindow
         $maximum_password_age->addValidation( 'Idade máxima da senha (dias)', new TRequiredValidator);
         
         $maximum_password_age->setSize('100%'); 
+        
+        $this->form->appendPage('Explicação');
+        
+        $this->form->addFields( [ $explicacao ] );
         
         // define the form action
         $this->form->addAction('Save', new TAction(array($this, 'onSave')), 'fa:save green');        

@@ -36,10 +36,14 @@ class MinimumPasswordLengthForm extends TWindow
         $minimum_password_length = new TEntry('minimum_password_length');       
         $minimum_password_length->setMask('9!');
         
+        $explicacao = new TLabel('Tamanho mínimo da senha, o padrão é 7, zero desabilita');
+        
         if(isset($_REQUEST['value']))
         {
             $minimum_password_length->setValue(substr($_REQUEST['value'], 1));
         }
+        
+        $this->form->appendPage('Configuração');
         
         // add the form fields
         $this->form->addFields( [ $minimum_password_length ] ); 
@@ -47,6 +51,10 @@ class MinimumPasswordLengthForm extends TWindow
         $minimum_password_length->addValidation( 'Comprimento mínimo da senha', new TRequiredValidator);
         
         $minimum_password_length->setSize('100%'); 
+        
+        $this->form->appendPage('Explicação');
+        
+        $this->form->addFields( [ $explicacao ] );
         
         // define the form action
         $this->form->addAction('Save', new TAction(array($this, 'onSave')), 'fa:save green');        

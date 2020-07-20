@@ -36,10 +36,14 @@ class AccountLockoutDurationForm extends TWindow
         $account_lockout_duration = new TEntry('account_lockout_duration');       
         $account_lockout_duration->setMask('9!');
         
+        $explicacao = new TLabel('O período de tempo que uma conta é bloqueada após exceder o limite de tentativas incorretas de senha, padrão 30 minutos , pode colocar numeros inteiros para minutos ou default');
+        
         if(isset($_REQUEST['value']))
         {
             $account_lockout_duration->setValue(substr($_REQUEST['value'], 1));
         }
+        
+        $this->form->appendPage('Configuração');
         
         // add the form fields
         $this->form->addFields( [ $account_lockout_duration ] ); 
@@ -47,6 +51,10 @@ class AccountLockoutDurationForm extends TWindow
         $account_lockout_duration->addValidation( 'Duração do bloqueio da conta (min)', new TRequiredValidator);
         
         $account_lockout_duration->setSize('100%'); 
+        
+        $this->form->appendPage('Explicação');
+        
+        $this->form->addFields( [ $explicacao ] );
         
         // define the form action
         $this->form->addAction('Save', new TAction(array($this, 'onSave')), 'fa:save green');        

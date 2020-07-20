@@ -36,10 +36,14 @@ class PasswordHistoryLengthForm extends TWindow
         $password_history_length = new TEntry('password_history_length');       
         $password_history_length->setMask('9!');
         
+        $explicacao = new TLabel('O tamanho do histórico da senha  pode colocar numeros inteiros para dias ou default, o default é 24');
+        
         if(isset($_REQUEST['value']))
         {
             $password_history_length->setValue(substr($_REQUEST['value'], 1));
         }
+        
+        $this->form->appendPage('Configuração');
         
         // add the form fields
         $this->form->addFields( [ $password_history_length ] ); 
@@ -47,6 +51,10 @@ class PasswordHistoryLengthForm extends TWindow
         $password_history_length->addValidation( 'Comprimento do histórico de senhas', new TRequiredValidator);
         
         $password_history_length->setSize('100%'); 
+        
+        $this->form->appendPage('Explicação');
+        
+        $this->form->addFields( [ $explicacao ] );
         
         // define the form action
         $this->form->addAction('Save', new TAction(array($this, 'onSave')), 'fa:save green');        

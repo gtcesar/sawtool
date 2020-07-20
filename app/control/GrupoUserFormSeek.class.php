@@ -46,6 +46,7 @@ class GrupoUserFormSeek extends TWindow
         $grupo_label = new TLabel('Grupo');
         
         $usuario = new TCombo('usuario');
+        $usuario->enableSearch(true);
         
         $usuario_label = new TLabel('Usuario');
 
