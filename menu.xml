@@ -14,7 +14,17 @@
             <menuitem label='Grupos'>
                 <icon>fa:users fa-fw</icon>
                 <action>GruposFormList</action>
-            </menuitem>           
+            </menuitem>   
+            
+           <menuitem label='Unidades Organizacionais'>
+                <icon>fa:university fa-fw</icon>
+                <action>OuFormList</action>
+            </menuitem>          
+            
+           <menuitem label='Computadores'>
+                <icon>fa:laptop fa-fw</icon>
+                <action>ComputadoresFormList</action>
+            </menuitem>  
             
             <menuitem label='Segurança'>
                 <icon>fas:user-shield fa-fw</icon>

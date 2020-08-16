@@ -11,6 +11,7 @@
 class ConfigForm extends TPage
 {
     private $form;
+    private $output;
     private $ip_servidor;
     private $dominio;
     private $user_admin;
@@ -28,6 +29,7 @@ class ConfigForm extends TPage
         
         $config = parse_ini_file('param/config.ini', true);
         
+        $this->output = $config['debug']['output'];
         $this->ip_servidor = $config['ldap']['server'];
         $this->dominio = $config['ldap']['dominio'];
         $this->user_admin = $config['ldap']['user'];
@@ -40,7 +42,14 @@ class ConfigForm extends TPage
         $this->form->setFormTitle('Formulario de configurações');
         
         // create the form fields
-
+        $output = new TRadioGroup('output');       
+        $output->setLayout('horizontal');
+        $output->setUseButton();
+        $output_itens = ['on' =>'Ligado', 'off' => 'Desligado'];
+        $output->addItems($output_itens);
+        $output->setValue($this->output);
+        $output_label = new TLabel('Exibir saida de comandos');
+        
         $ip_servidor = new TEntry('ip_servidor');  
         $ip_servidor->setValue($this->ip_servidor);        
         $ip_servidor_label = new TLabel('IP do servidor');
@@ -139,6 +148,7 @@ class ConfigForm extends TPage
 
   
         // add a row with 2 slots
+        $this->form->addFields( [ $output_label ], [ $output ] ); 
         $this->form->addFields( [ $ip_servidor_label ], [ $ip_servidor ] );     
         $this->form->addFields( [ $dominio_label ], [ $dominio ] ); 
         $this->form->addFields( [ $user_admin_label ], [ $user_admin ] ); 
@@ -199,7 +209,9 @@ class ConfigForm extends TPage
             
             $fp = fopen('param/config.ini', "w+");            
            
-$dados = '[ldap]
+$dados = '[debug]
+output = "'. $data->output .'"
+[ldap]
 server = "'. $data->ip_servidor .'"
 dominio = "'. $data->dominio .'"
 user = "'. $data->user_admin .'"

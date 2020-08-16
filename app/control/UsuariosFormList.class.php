@@ -13,6 +13,8 @@ class UsuariosFormList extends TPage
     protected $form; // form
     protected $datagrid; // datagrid
     private $samba_tool;
+    private $output;
+    private $dominio;
     private $user_ignore;    
     
     
@@ -27,11 +29,13 @@ class UsuariosFormList extends TPage
         $config = parse_ini_file('param/config.ini', true);
         
         $this->samba_tool = $config['samba-tool']['path'];
+        $this->dominio = $config['ldap']['dominio'];
+        $this->output = $config['debug']['output'];
         $this->user_ignore = $config['samba-tool']['user_ignore'];
         
         // creates the form
         $this->form = new BootstrapFormBuilder('form_usuarios');
-        $this->form->setFormTitle('Usuarios');
+        $this->form->setFormTitle('Usuario');
         
         // create the form fields
 
@@ -99,9 +103,15 @@ class UsuariosFormList extends TPage
         $action2->setImage('fa:lock blue');
         $action2->setField('login');
         
+        $action3 = new TDataGridAction(array($this, 'onMove'));
+        $action3->setLabel('Mover usuário');
+        $action3->setImage('fa:retweet green');
+        $action3->setField('login');        
+        
         // add the actions to the datagrid
         $this->datagrid->addAction($action1);
         $this->datagrid->addAction($action2);
+        $this->datagrid->addAction($action3);
         
         // create the datagrid model
         $this->datagrid->createModel();      
@@ -183,6 +193,12 @@ class UsuariosFormList extends TPage
       $login = $param['login']; // get the parameter $key
       
       $comando = "sudo " . $this->samba_tool . " user delete '{$login}'";        
+      
+      if($this->output == 'on')
+      {
+         echo "<pre>".$comando."</pre>";
+      }
+      
       $result = shell_exec($comando);
       
       if ($result) {
@@ -242,7 +258,13 @@ class UsuariosFormList extends TPage
               $alterar_senha = '';
             }
       
-            $comando = "sudo " . $this->samba_tool . " user setpassword '{$login}' --newpassword={$senha} {$alterar_senha}";        
+            $comando = "sudo " . $this->samba_tool . " user setpassword '{$login}' --newpassword={$senha} {$alterar_senha}";     
+            
+            if($this->output == 'on')
+            {
+              echo "<pre>".$comando."</pre>";
+            }
+               
             $result = shell_exec($comando);
             
             if ($result) {
@@ -274,6 +296,12 @@ class UsuariosFormList extends TPage
             }
       
             $comando = "sudo " . $this->samba_tool . " user create '{$data->login}' {$data->senha} --given-name='{$data->nome}' --surname='{$data->sobrenome}' {$alterar_senha}";   
+            
+            if($this->output == 'on')
+            {
+               echo "<pre>".$comando."</pre>";
+            }
+            
             $result = shell_exec($comando);
             
             if ($result) {
@@ -292,6 +320,124 @@ class UsuariosFormList extends TPage
          
 
     }
+    
+    
+    public function onMove( $param )
+    {
+
+        $form = new BootstrapFormBuilder('move_form');
+        
+        $nome_login = $param['login'];
+        
+        $login = new TEntry('login');
+        $login->setValue($nome_login);
+        $login->setEditable(FALSE);
+        
+        //obtemos a localização atual do login
+        $comando_show = "sudo " . $this->samba_tool . " user show {$nome_login}";         
+        $result_show = shell_exec($comando_show);
+        
+        $local_show = explode("\n", $result_show);        
+        array_pop($local_show);    
+        
+        //mostramos apenas o local onde o mesmo esta alocado
+        $local_array = explode(",", $local_show[0]);
+        array_shift($local_array);
+        array_pop($local_array); 
+        array_pop($local_array); 
+        $local = implode(",", $local_array);        
+
+        $alocado = new TEntry('alocado');
+        $alocado->setValue($local);
+        $alocado->setEditable(FALSE);
+        
+        $unidade_destino = new TCombo('unidade_destino');
+        
+        //listamos os usuarios do grupo passado pela request
+        $comando = "sudo " . $this->samba_tool . " ou list";         
+        $result = shell_exec($comando);
+        
+        $ous = explode("\n", $result);        
+        array_pop($ous);
+        sort($ous);
+        
+        //montamos a a DC RAIZ
+        $dc = explode(".", $this->dominio); 
+        $dc1 = substr($dc[0], 1);
+        $dc2 = $dc[1];
+        $raiz = "CN=Users,DC={$dc1},DC={$dc2}";
+        
+        //criamos um array com os itens tratados ate o momento
+        $array_ous = array();
+        $array_ous[$raiz] = '--- Alocação padrão ---';
+        
+        //caso o objeto ja esteja na raiz, retiramos a opção RAIZ da lista
+        if($local == 'CN=Users')
+        {
+            unset($array_ous[$raiz]);
+        }
+        
+
+        //populamos o array
+        foreach ($ous as $key => $value) { 
+            
+            $item = explode(",", $value);    
+            $qtd = count($item);
+            $pai = end($item);       
+            
+            //exibimos apenas o nome da UNIDADE
+            $nome_simplificado = substr($item[0], 3);
+            $array_ous[$value] = $nome_simplificado; 
+          
+        }
+      
+                
+        $unidade_destino->addItems($array_ous);
+
+
+        $login->setSize('100%'); 
+        $alocado->setSize('100%');
+        $unidade_destino->setSize('100%'); 
+        
+        $form->addFields( [new TLabel('Usuário')], [$login]);
+        $form->addFields( [new TLabel('Alocado atualmente em')], [$alocado]);
+        $form->addFields( [new TLabel('Mover para')], [$unidade_destino]);
+        
+        $form->addAction('Salvar', new TAction([__CLASS__, 'moveUsuario']), 'fa:save green');
+        
+        // show the input dialog
+        new TInputDialog('Mover usuário', $form);
+
+    }
+
+    public function moveUsuario( $param )
+    {
+            $login = $param['login'];
+
+            //tratamos os dados colocando aspas simpes ao redor do nome para permitir manipulação com espaços            
+            $unidade_destino_array = explode(',', $param['unidade_destino']);
+            $u = array();
+            foreach ($unidade_destino_array as $ou){
+                 $u[] = "'" . $ou . "'";
+            }
+            $unidade_destino = implode(",", $u);
+      
+            $comando = "sudo " . $this->samba_tool . " user move '{$login}' {$unidade_destino}";        
+            
+            if($this->output == 'on')
+            {
+               echo "<pre>".$comando."</pre>";
+            }
+            
+            $result = shell_exec($comando);            
+            
+            if ($result) {
+               new TMessage('info', 'Usuário movido com sucesso!'); 
+               $this->onReload(); // reload the listing          
+            } 
+
+    }  
+    
     
     /**
      * method show()
