@@ -58,7 +58,7 @@ class ComputadoresFormList extends TPage
         $this->datagrid->addAction($action1, _t('Delete'), 'far:trash-alt red');        
         
         $action2 = new TDataGridAction([$this, 'onMove'],   ['computador' => '{computador}'] );
-        $this->datagrid->addAction($action2, 'Mover unidade', 'fa:retweet green');
+        $this->datagrid->addAction($action2, 'Mover computador', 'fa:retweet green');
 
         
         // creates the datagrid model
@@ -234,6 +234,13 @@ class ComputadoresFormList extends TPage
         $ous = explode("\n", $result);        
         array_pop($ous);
         sort($ous);
+        
+        //retiramos a unidade selecionada de dentro do array
+        $key = array_search($local, $ous);
+        if($key!==false)
+        {
+            unset($ous[$key]);
+        }
         
         //montamos a a DC RAIZ
         $dc = explode(".", $this->dominio); 

@@ -361,6 +361,13 @@ class UsuariosFormList extends TPage
         array_pop($ous);
         sort($ous);
         
+        //retiramos a unidade selecionada de dentro do array
+        $key = array_search($local, $ous);
+        if($key!==false)
+        {
+            unset($ous[$key]);
+        }
+        
         //montamos a a DC RAIZ
         $dc = explode(".", $this->dominio); 
         $dc1 = substr($dc[0], 1);
