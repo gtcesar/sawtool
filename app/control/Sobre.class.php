@@ -23,7 +23,7 @@ class Sobre extends TPage
         // replace the main section variables
         $html->enableSection('main', array());
         
-        $panel = new TPanelGroup('SAWTOOL');
+        $panel = new TPanelGroup('SAWTOOL 1.1.0.1');
         $panel->add($html);
 
         $vbox = TVBox::pack($panel);
